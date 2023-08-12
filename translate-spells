@@ -1,0 +1,63 @@
+#!/bin/bash
+set -uo pipefail
+
+sentences=""
+[ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
+if [ -z "${sentences}" ]; then
+  printf "There is no translation target. Please execute as in the following example\necho 'sentences' | %s\n" "$(basename "$0")"
+  exit 1
+fi
+
+SPELLS_DIR="$(dirname "$0")/spells"
+readonly SPELLS_DIR
+[ ! -e "${SPELLS_DIR}" ] && mkdir -p "${SPELLS_DIR}"
+
+# shellcheck disable=SC2001
+spell="$(echo "${sentences}" | sed s/' '/_/)"
+
+# Search cache
+if [ -e "${SPELLS_DIR}/${spell}" ]; then
+  printf "Show from cache\n\n"
+  afplay "${SPELLS_DIR}/${spell}" &
+  echo "${sentences}" | trans
+  exit 0
+fi
+
+# shellcheck disable=SC2046
+cd $(dirname "$0") || exit
+rm ./request.json ./synthesize-output-base64.txt ./synthesized-audio.mp3 >/dev/null 2>&1
+
+# GCP's text-to-speech
+cat <<-EOF >./request.json
+{
+  "input":{
+    "text":"${sentences}"
+  } ,
+  "voice":{
+    "languageCode":"en-gb",
+    "name":"en-GB-Standard-A",
+    "ssmlGender":"FEMALE"
+  },
+  "audioConfig":{
+    "audioEncoding":"MP3",
+    'effectsProfileId': ['telephony-class-application']
+  }
+}
+EOF
+curl -sSL -X POST \
+-H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+-H "Content-Type: application/json; charset=utf-8" \
+-d @request.json \
+"https://texttospeech.googleapis.com/v1/text:synthesize" | jq -r '.audioContent' > ./synthesize-output-base64.txt
+# Decode
+base64 --decode synthesize-output-base64.txt > ./synthesized-audio.mp3
+
+# Read & translate
+afplay ./synthesized-audio.mp3 &
+echo "${sentences}" | trans
+
+# Rename for cache
+mv ./synthesized-audio.mp3 "${SPELLS_DIR}/${spell}"
+
+# Return to the original directory
+cd - >/dev/null || exit
