@@ -1,10 +1,26 @@
 #!/bin/bash
 set -uo pipefail
 
+function usage {
+    cat <<EOF
+Translate the text into Japanese.
+In addition, google cloud's text-to-speech allows you to read naturally.
+
+Usage:
+    echo <translation target> | $(basename "${0}")
+
+Options:
+    under construction..
+    ..
+EOF
+    # Options:
+    #     --help, -h        print this
+}
+
 sentences=""
 [ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
 if [ -z "${sentences}" ]; then
-    printf "There is no translation target. Please execute as in the following example\necho 'sentences' | %s\n" "$(basename "$0")"
+    usage
     exit 1
 fi
 
