@@ -13,7 +13,7 @@ readonly SPELLS_DIR
 [ ! -e "${SPELLS_DIR}" ] && mkdir -p "${SPELLS_DIR}"
 
 # shellcheck disable=SC2001
-spell="$(echo "${sentences}" | sed s/' '/_/)"
+spell="$(echo "${sentences}" | sed s/' '/_/g)"
 
 # Search cache
 if [ -e "${SPELLS_DIR}/${spell}" ]; then

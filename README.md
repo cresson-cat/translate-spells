@@ -4,6 +4,8 @@ Translate the text into Japanese. In addition, google cloud's text-to-speech all
 
 The following is being written..
 
+----------
+
 1. shellscript の初期設定 >> OK
 1. 引数の存在チェック。存在しない場合は処理終了 >> OK
    - そもそも、標準入力に変更する
