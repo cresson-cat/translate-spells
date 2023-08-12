@@ -4,8 +4,8 @@ set -uo pipefail
 sentences=""
 [ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
 if [ -z "${sentences}" ]; then
-  printf "There is no translation target. Please execute as in the following example\necho 'sentences' | %s\n" "$(basename "$0")"
-  exit 1
+    printf "There is no translation target. Please execute as in the following example\necho 'sentences' | %s\n" "$(basename "$0")"
+    exit 1
 fi
 
 SPELLS_DIR="$(dirname "$0")/spells"
@@ -17,10 +17,10 @@ spell="$(echo "${sentences}" | sed s/' '/_/)"
 
 # Search cache
 if [ -e "${SPELLS_DIR}/${spell}" ]; then
-  printf "Show from cache\n\n"
-  afplay "${SPELLS_DIR}/${spell}" &
-  echo "${sentences}" | trans
-  exit 0
+    printf "Show from cache\n\n"
+    afplay "${SPELLS_DIR}/${spell}" &
+    echo "${sentences}" | trans
+    exit 0
 fi
 
 # shellcheck disable=SC2046
