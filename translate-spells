@@ -25,6 +25,7 @@ function get_option {
 
 sentences=""
 [ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
+sentences="$(echo "${sentences}" | sed -E s/\'\|\"\|\\.//g)"
 if [ -z "${sentences}" ]; then
     usage
     exit 1
