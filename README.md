@@ -1,17 +1,59 @@
 # translate-spells
 
-Translate the text into Japanese. In addition, google cloud's text-to-speech allows you to read naturally
+This tool translates English text into Japanese with `translate-shell`.  
+It also reads out the English text naturally using Google Cloud `text-to-speech AI`.  
+This tool is designed to run on Mac.
 
-The following is being written..
+-----
 
-----------
+本ツールは `translate-shell` により、英文を日本語訳します。  
+また英文を、Google Cloud の `text-to-speech AI` により、自然に読み上げます。  
+本ツールは Mac 上での動作を想定しています。
 
-1. shellscript の初期設定 >> OK
-1. 引数の存在チェック。存在しない場合は処理終了 >> OK
-   - そもそも、標準入力に変更する
-1. 単語 / 文章をキャッシュしておく。キャッシュミスした場合のみ API を呼ぶ >> OK
-   - 400万文字/月以上読み上げなければ課金されないが、念の為
-1. usage 関数を作成 >> OK
-1. README 書く
+<!--
 1. ファイルを開けるようにする（-i <file_path>）
 1. trans コマンドへ引数を渡せるようにする（-- -b.. のように -- 以降を渡す）
+-->
+
+## Features
+
+The tool caches `text-to-speech AI` executions in a directory called `spells` to suppress billing (Free up to 4 million characters per month .. As of Aug. 2023).  
+You can delete the cache at any time.
+
+-----
+
+本ツールは `spells` というディレクトリに `text-to-speech AI` の実行結果をキャッシュし、課金を抑制しています。（月あたり400万文字まで無料 .. 2023/08 時点）  
+キャッシュは、任意のタイミングで削除してください。
+
+## Requirement
+
+- [text-to-speech AI](https://cloud.google.com/text-to-speech)
+- curl
+- base64
+- translate-shell
+
+## Installation
+
+Refer to [this section](https://cloud.google.com/text-to-speech/docs/before-you-begin) and proceed to the "Set environment variables for authentication information" section.
+
+```bash
+brew update && brew upgrade
+brew install curl base64 translate-shell
+```
+
+## Usage
+
+```bash
+git clone https://github.com/cresson-cat/translate-spells.git
+cd ./translate-spells
+chmod x+u ./translate-spells
+echo 'hello' | ./translate-spells
+```
+
+## Author
+
+- aider
+ 
+## License
+ 
+"translate-spells" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).

@@ -3,8 +3,8 @@ set -uo pipefail
 
 function usage {
     cat <<EOF
-Translate the text into Japanese.
-In addition, google cloud's text-to-speech allows you to read naturally.
+This tool translates English text into Japanese with transtale-shell.
+It also reads out the English text naturally using Google Cloud text-to-speech.
 
 Usage:
     echo <translation target> | $(basename "${0}")
@@ -14,12 +14,9 @@ Options:
 EOF
 }
 
-function get_option () {
+function get_option {
     case $1 in
-        --help|-h)
-            usage
-            exit 0
-        ;;
+        --help|-h) usage && exit 0 ;;
         *) return 0 ;;
     esac
 }
@@ -55,16 +52,16 @@ rm ./request.json ./synthesize-output-base64.txt ./synthesized-audio.mp3 >/dev/n
 # GCP's text-to-speech
 cat <<-EOF >./request.json
 {
-  "input":{
-    "text":"${sentences}"
-  } ,
-  "voice":{
-    "languageCode":"en-gb",
-    "name":"en-GB-Standard-A",
-    "ssmlGender":"FEMALE"
+  "input": {
+    "text": "${sentences}"
   },
-  "audioConfig":{
-    "audioEncoding":"MP3",
+  "voice": {
+    "languageCode": "en-gb",
+    "name": "en-GB-Standard-A",
+    "ssmlGender": "FEMALE"
+  },
+  "audioConfig": {
+    "audioEncoding": "MP3",
     'effectsProfileId': ['telephony-class-application']
   }
 }
