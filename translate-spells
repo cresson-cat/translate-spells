@@ -10,12 +10,21 @@ Usage:
     echo <translation target> | $(basename "${0}")
 
 Options:
-    under construction..
-    ..
+    --help, -h        print this
 EOF
-    # Options:
-    #     --help, -h        print this
 }
+
+function get_option () {
+    case $1 in
+        --help|-h)
+            usage
+            exit 0
+        ;;
+        *) return 0 ;;
+    esac
+}
+
+[ -n "$*" ] && get_option "$*"
 
 sentences=""
 [ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
