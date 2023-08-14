@@ -10,20 +10,27 @@ This tool is designed to run on Mac.
 また英文を、Google Cloud の `text-to-speech AI` により、自然に読み上げます。  
 本ツールは Mac 上での動作を想定しています。
 
-<!--
-1. ファイルを開けるようにする（-i <file_path>）
-1. trans コマンドへ引数を渡せるようにする（-- -b.. のように -- 以降を渡す）
--->
-
 ## Features
 
-The tool caches `text-to-speech AI` executions in a directory called `spells` to suppress billing (Free up to 4 million characters per month .. As of Aug. 2023).  
-You can delete the cache at any time.
+1. This tool caches `text-to-speech AI` executions in a directory called `spells` to suppress billing (Free up to 4 million characters per month .. As of Aug. 2023). You can delete the cache at any time.
+
+1. This tool allows you to pass `translate-shell` arguments directly, as follows
+
+   ```bash
+   # -- followed by the translate-shell argument
+   echo 'hello' | ./translate-spells -- -b
+   ```
 
 -----
 
-本ツールは `spells` というディレクトリに `text-to-speech AI` の実行結果をキャッシュし、課金を抑制しています。（月あたり400万文字まで無料 .. 2023/08 時点）  
-キャッシュは、任意のタイミングで削除してください。
+1. 本ツールは `spells` というディレクトリに `text-to-speech AI` の実行結果をキャッシュし、課金を抑制しています。（月あたり400万文字まで無料 .. 2023/08 時点）キャッシュは、任意のタイミングで削除してください。
+
+1. 本ツールは、以下のように `translate-shell` の引数を直接渡すことができます。
+
+   ```bash
+   # -- followed by the translate-shell argument
+   echo 'hello' | ./translate-spells -- -b
+   ```
 
 ## Requirement
 

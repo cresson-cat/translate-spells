@@ -10,18 +10,22 @@ Usage:
     echo <translation target> | $(basename "${0}")
 
 Options:
-    --help, -h        print this
+    -- <translate-args>   -- followed by the translate-shell argument. For example, -b, etc.
+    --help, -h            print this
 EOF
 }
 
+has_trans_args=0 # With translate-shell option argument -> 1
 function get_option {
     case $1 in
+        --) has_trans_args=1 && return 0 ;;
         --help|-h) usage && exit 0 ;;
         *) return 0 ;;
     esac
 }
 
-[ -n "$*" ] && get_option "$*"
+[ $# -gt 0 ] && get_option "$1"
+[ ${has_trans_args} -eq 1 ] && shift
 
 sentences=""
 [ -p /dev/stdin ] && sentences="$(cat -)" # Receive from standard input
@@ -41,8 +45,8 @@ spell="$(echo "${sentences}" | sed s/' '/_/g)"
 # Search cache
 if [ -e "${SPELLS_DIR}/${spell}" ]; then
     printf "Show from cache\n\n"
-    afplay "${SPELLS_DIR}/${spell}" &
-    echo "${sentences}" | trans
+    echo "${sentences}" | trans "$@"
+    afplay "${SPELLS_DIR}/${spell}"
     exit 0
 fi
 
@@ -76,8 +80,8 @@ curl -sSL -X POST \
 base64 --decode synthesize-output-base64.txt > ./synthesized-audio.mp3
 
 # Read & translate
-afplay ./synthesized-audio.mp3 &
-echo "${sentences}" | trans
+echo "${sentences}" | trans "$@"
+afplay ./synthesized-audio.mp3
 
 # Rename for cache
 mv ./synthesized-audio.mp3 "${SPELLS_DIR}/${spell}"
