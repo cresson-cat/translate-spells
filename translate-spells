@@ -24,6 +24,16 @@ function get_option {
     esac
 }
 
+function get_phonetic_symbols {
+    curl -sSL 'https://freeenglish.jp/convertp.php' \
+    -H 'content-type: application/x-www-form-urlencoded' \
+    --data-raw "englishtext=${1}&prontype=jones&fontsize=11" \
+    --compressed \
+    | pup '.ipa json{}' \
+    | jq -r '.[] | if .children then .children = ([ .children[].text ] | join("")) else .children = "" end | .text = .text + .children | .text' \
+    | xargs
+}
+
 [ $# -gt 0 ] && get_option "$1"
 [ ${has_trans_args} -eq 1 ] && shift
 
@@ -41,10 +51,12 @@ readonly SPELLS_DIR
 
 # shellcheck disable=SC2001
 spell="$(echo "${sentences}" | sed s/' '/_/g)"
+persent_encoding="$(echo "${sentences}" | jq -Rr '@uri')"
 
 # Search cache
 if [ -e "${SPELLS_DIR}/${spell}" ]; then
     printf "Show from cache\n\n"
+    get_phonetic_symbols "${persent_encoding}"
     echo "${sentences}" | trans "$@"
     afplay "${SPELLS_DIR}/${spell}"
     exit 0
@@ -80,6 +92,7 @@ curl -sSL -X POST \
 base64 --decode synthesize-output-base64.txt > ./synthesized-audio.mp3
 
 # Read & translate
+get_phonetic_symbols "${persent_encoding}"
 echo "${sentences}" | trans "$@"
 afplay ./synthesized-audio.mp3
 
