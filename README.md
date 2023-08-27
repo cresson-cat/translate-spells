@@ -38,14 +38,19 @@ This tool is designed to run on Mac.
 - curl
 - base64
 - translate-shell
+- jq
 
 ## Installation
 
 Refer to [this section](https://cloud.google.com/text-to-speech/docs/before-you-begin) and proceed to the "Set environment variables for authentication information" section.
 
+-----
+
+このセクションを参照し、"認証情報の環境変数を設定する" まで進めてください
+
 ```bash
 brew update && brew upgrade
-brew install curl base64 translate-shell
+brew install curl base64 translate-shell jq
 ```
 
 ## Usage
