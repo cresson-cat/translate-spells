@@ -57,6 +57,7 @@ persent_encoding="$(echo "${sentences}" | jq -Rr '@uri')"
 if [ -e "${SPELLS_DIR}/${spell}" ]; then
     printf "Show from cache\n\n"
     get_phonetic_symbols "${persent_encoding}"
+    echo "---"
     echo "${sentences}" | trans "$@"
     afplay "${SPELLS_DIR}/${spell}"
     exit 0
@@ -93,6 +94,7 @@ base64 --decode synthesize-output-base64.txt > ./synthesized-audio.mp3
 
 # Read & translate
 get_phonetic_symbols "${persent_encoding}"
+echo "---"
 echo "${sentences}" | trans "$@"
 afplay ./synthesized-audio.mp3
 
