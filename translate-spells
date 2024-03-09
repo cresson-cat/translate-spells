@@ -80,7 +80,7 @@ cat <<-EOF >./request.json
   },
   "audioConfig": {
     "audioEncoding": "MP3",
-    'effectsProfileId': ['telephony-class-application']
+    'effectsProfileId': ['headphone-class-device']
   }
 }
 EOF
