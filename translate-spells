@@ -1,6 +1,9 @@
 #!/bin/bash
 set -uo pipefail
 
+# shellcheck disable=SC1091
+. "$(dirname "$0")/.env"
+
 function usage {
     cat <<EOF
 This tool translates English text into Japanese with transtale-shell.
