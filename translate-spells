@@ -2,7 +2,7 @@
 set -uo pipefail
 
 # shellcheck disable=SC1091
-. "$(dirname "$0")/.env"
+. "$(dirname "$0")/set.env" # Setting environment variables
 
 function usage {
     cat <<EOF
@@ -63,6 +63,8 @@ if [ -e "${SPELLS_DIR}/${spell}" ]; then
     echo "---"
     echo "${sentences}" | trans "$@"
     afplay "${SPELLS_DIR}/${spell}"
+    # shellcheck disable=SC1091
+    . "$(dirname "$0")/unset.env" # Unset environment variables
     exit 0
 fi
 
@@ -106,3 +108,6 @@ mv ./synthesized-audio.mp3 "${SPELLS_DIR}/${spell}"
 
 # Return to the original directory
 cd - >/dev/null || exit
+
+# shellcheck disable=SC1091
+. "$(dirname "$0")/unset.env" # Unset environment variables
